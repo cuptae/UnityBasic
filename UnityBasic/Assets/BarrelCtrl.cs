@@ -21,10 +21,13 @@ public class BarrelCtrl : MonoBehaviour
     private MeshFilter meshFilter;
     //MeshRenderer 컴포넌트를 저장할 변수
     private MeshRenderer _renderer;
+    //AudioSource 컴포넌트를 저장할 변수
+    private AudioSource _audio;
 
     //폭발 반경
     public float expRadius = 10.0f;
-
+    //폭발음 오디오 클립
+    public AudioClip expSfx;
     // Start is called before the first frame update
     void Start()
     {
@@ -36,6 +39,8 @@ public class BarrelCtrl : MonoBehaviour
         
         //MeshRenderer 컴포넌트를 추출해 저장
         _renderer= GetComponent<MeshRenderer>();
+
+        _audio= GetComponent<AudioSource>();
 
         //난수를 발생시켜 불규칙적인 텍스처를 적용
         _renderer.material.mainTexture = textures[Random.Range(0, textures.Length)];
@@ -71,6 +76,9 @@ public class BarrelCtrl : MonoBehaviour
         int idx = UnityEngine.Random.Range(0, meshes.Length);
         //찌그러진 메쉬를 적용
         meshFilter.sharedMesh = meshes[idx];
+
+        //폭발음 발생
+        _audio.PlayOneShot(expSfx, 1.0f);
     }
 
     private void IndirectDamage(Vector3 position)
